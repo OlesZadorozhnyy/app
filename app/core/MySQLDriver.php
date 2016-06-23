@@ -27,6 +27,7 @@ class MySQLDriver implements DatabaseInterface
 	public function executeQuery($sql, $params = [])
 	{
 		$this->query = self::$instance->prepare($sql);
+
 		if (count($params)) {
 			$number = 1;
 			foreach ($params as $key => $param) {

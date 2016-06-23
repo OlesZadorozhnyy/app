@@ -13,7 +13,7 @@ class Config
 	{
 		if ($path) {
 			$pathArray = explode('.', trim($path));
-			var_dump($pathArray);
+			
 			foreach ($pathArray as $key => $item) {
 				if (isset(self::$data[$item])) {
 					$setting = self::$data[$item];
