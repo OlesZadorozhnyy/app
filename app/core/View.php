@@ -9,7 +9,7 @@ class View
 
 	public function __construct($workingFolder)
 	{
-		$this->workingFolder = $workingFolder;
+		$this->workingFolder = strtolower($workingFolder);
 	}
 
 	public function set($name, $value)

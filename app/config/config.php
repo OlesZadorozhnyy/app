@@ -9,6 +9,11 @@ $settings = [
 		'user' => 'root',
 		'password' => '',
 		'dbname' => 'map_db'
+	],
+	'router' => [
+		'defaultController' => 'Post',
+		'defaultAction' => 'index',
+		'defaultErrorAction' => 'error'
 	]
 ];
 
