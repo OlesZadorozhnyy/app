@@ -17,10 +17,14 @@ class Controller
 	{
 		if(!empty($this->uses)) {
 			foreach ($this->uses as $item) {
-				$this->{$item} = new $item;
+				if (class_exists($item)) {
+					$this->{$item} = new $item;
+				}
 			}	
 		} else {
-			$this->{$controller} = new $controller;
+			if (class_exists($controller)) {
+				$this->{$controller} = new $controller;
+			}
 		}
 	}
 

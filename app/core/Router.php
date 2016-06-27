@@ -11,21 +11,20 @@ class Router
 	{
 		$this->controller = Config::get('router.defaultController');
 		$this->action = Config::get('router.defaultAction');
-		$url = rtrim($_SERVER['REQUEST_URI'], '/');
+		$url = trim($_SERVER['REQUEST_URI'], '/');
 		$urlItems = explode('/', $url);
 
-		if (isset($urlItems[1]) && !empty($urlItems[1])) {
-			$this->controller = $urlItems[1];
+		if (!empty($urlItems[0])) {
+			$this->controller = $urlItems[0];
 		}
 
-		if (isset($urlItems[2]) && !empty($urlItems[2])) {
-			$this->action =  $urlItems[2];
+		if (!empty($urlItems[1])) {
+			$this->action = $urlItems[1];
 		}
 
-		if (count($urlItems) > 3) { 
-			$this->params = array_slice($urlItems, 3);
+		if (count($urlItems) > 2) { 
+			$this->params = array_slice($urlItems, 2);
 		}
-		var_dump($this);
 	}
 
 	public function run()
@@ -36,17 +35,12 @@ class Router
 		$view = strtolower($this->action);
 		$errorView = strtolower(preg_replace('/action/', null, Config::get('router.defaultErrorAction')));
 
-		if (class_exists($controllerName)) {
+		if (class_exists($controllerName) && method_exists($controllerName, $actionName)) {
 			$this->controller = new $controllerName($this->controller, $this->params);
-		}
-
-		if (method_exists($this->controller, $actionName)) {
-
 			call_user_func_array([$this->controller, $actionName], $this->params);
 			$this->controller->display($view);
 
 		} else {
-
 			$controllerName = ucfirst(Config::get('router.defaultController')) . 'Controller';
 
 			$this->controller = new $controllerName(Config::get('router.defaultController'), $this->params);
