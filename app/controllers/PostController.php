@@ -15,7 +15,7 @@ class PostController extends Controller
 
 	public function actionIndex()
 	{
-
+		
 	}
 
 	public function actionError()

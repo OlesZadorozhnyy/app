@@ -2,7 +2,7 @@
 
 class MySQLDriver implements DatabaseInterface
 {
-	private static $instance = null;
+	public static $instance = null;
 
 	private $query;
 	private $result;
@@ -27,19 +27,16 @@ class MySQLDriver implements DatabaseInterface
 	public function executeQuery($sql, $params = [])
 	{
 		$this->query = self::$instance->prepare($sql);
-
 		if (count($params)) {
 			$number = 1;
 			foreach ($params as $key => $param) {
 				$this->query->bindValue($number, $param);
 				$number++;
-			}
-
-			if ($this->query->execute()) {
-				$this->result = $this->query->fetchAll(PDO::FETCH_ASSOC);
-			}
+			}			
 		}
-		return $this;
+		if ($this->query->execute()) {
+			$this->result = $this->query->fetchAll(PDO::FETCH_ASSOC);
+		}
 	}
 
 	public function getResults()

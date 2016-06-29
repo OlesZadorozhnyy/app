@@ -2,7 +2,7 @@
 
 class Table
 {
-	private $db;
+	protected $db;
 
 	public function __construct()
 	{
@@ -17,7 +17,7 @@ class Table
 
 		foreach ($where as $key => $whereItem) {
 			if (!is_numeric($key)) {
-				$result['query'][] = $key . '= ?';
+				$result['query'][] = $key . ' = ?';
 				$result['params'][] = $whereItem;
 			} else {
 				$result['query'][] = $whereItem;
@@ -63,7 +63,7 @@ class Table
 			$params[] = $value;
 		}
 
-		$keys = implode(', ', array_keys($column));
+		$keys = implode(', ', array_values($column));
 		$values = implode(', ', array_values($values));
 
 		$sql = "INSERT INTO " . $table . " (" . $keys . ") VALUES (" . $values . ")";
