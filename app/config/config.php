@@ -7,7 +7,7 @@ $settings = [
 		'driver' => 'MySQLDriver',
 		'host' => 'localhost',
 		'user' => 'root',
-		'password' => '',
+		'password' => '1Q2A3z4o',
 		'dbname' => 'map_db'
 	],
 	'router' => [

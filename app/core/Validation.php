@@ -5,9 +5,12 @@ class Validation
 
 	public static $errors = [];
 
+	public static $validationPassed = true;
+
 	public static function min($name, $data, $rule)
 	{
 		if (strlen($data) < $rule) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field must have more than ' . $rule . ' characters';
 		}
 	}
@@ -15,18 +18,17 @@ class Validation
 	public static function max($name, $data, $rule)
 	{
 		if (strlen($input) > $rule) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field must have less than ' . $rule . ' characters';
 		}
 	}
 
-	public static function unique($name, $data, $rule)
+	public static function unique($name, $data, $rule, $model)
 	{
-
-		$modelName = debug_backtrace()[2]['class'];
-		$model = new $modelName;
 
 		$result = $model->find([$name => $data]);
 		if (!empty($result)) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Write another ' . ucfirst($name);
 		}	
 	}
@@ -34,6 +36,7 @@ class Validation
 	public static function matches($name, $data, $rule)
 	{
 		if ($data !== $_POST[$rule]) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = ucfirst($name) . ' doesn\'t match with ' . ucfirst($rule) . ' field';
 		}
 	}
@@ -41,6 +44,7 @@ class Validation
 	public static function email($name, $data, $rule)
 	{
 		if (!filter_var($data, FILTER_VALIDATE_EMAIL)) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field doesn\'t contain email';
 		}
 	}
@@ -48,6 +52,7 @@ class Validation
 	public static function required($name, $data, $rule)
 	{
 		if (empty($data)) {
+			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field is required';
 		}
 	}

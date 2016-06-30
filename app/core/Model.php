@@ -15,12 +15,20 @@ class Model extends Table
 			foreach ($rules as $ruleName => $rule) {
 				foreach ($rule as $ruleMethod => $ruleValue) {
 					if ($key === $ruleName) {
-						Validation::$ruleMethod($key, $value, $ruleValue);
+						if ($ruleMethod === 'unique') {
+							Validation::$ruleMethod($key, $value, $ruleValue, $this);
+						} else {
+							Validation::$ruleMethod($key, $value, $ruleValue);
+						}
 					}
 				}
 			}
 		}
-		return Validation::getErrors();
+		if (Validation::$validationPassed === false) {
+			return Validation::getErrors();
+		} else {
+			return true;
+		}
 	}
 
 	public function save($data = [], $where = [])

@@ -2,7 +2,7 @@
 
 class MySQLDriver implements DatabaseInterface
 {
-	public static $instance = null;
+	private static $instance = null;
 
 	private $query;
 	private $result;

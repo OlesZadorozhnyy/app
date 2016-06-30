@@ -2,7 +2,7 @@
 
 class Table
 {
-	protected $db;
+	private $db;
 
 	public function __construct()
 	{
