@@ -24,11 +24,8 @@ class Model extends Table
 				}
 			}
 		}
-		if (Validation::$validationPassed === false) {
-			return false;
-		} else {
-			return true;
-		}
+
+		return Validation::$validationPassed;
 	}
 
 	public function save($data = [], $where = [])
