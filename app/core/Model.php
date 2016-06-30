@@ -10,22 +10,22 @@ class Model extends Table
 	public function validate($post = [])
 	{
 		$rules = $this->validationRules;
-
 		foreach ($post as $key => $value) {
 			foreach ($rules as $ruleName => $rule) {
 				foreach ($rule as $ruleMethod => $ruleValue) {
 					if ($key === $ruleName) {
-						if ($ruleMethod === 'unique') {
+						if (in_array($ruleMethod, Validation::getRequiresInstances())) {
 							Validation::$ruleMethod($key, $value, $ruleValue, $this);
 						} else {
 							Validation::$ruleMethod($key, $value, $ruleValue);
 						}
+						
 					}
 				}
 			}
 		}
 		if (Validation::$validationPassed === false) {
-			return Validation::getErrors();
+			return false;
 		} else {
 			return true;
 		}
@@ -63,5 +63,10 @@ class Model extends Table
 	public function getTable()
 	{
 		return $this->tableName;
+	}
+
+	public function getErrors()
+	{
+		return Validation::getErrors();
 	}
 }

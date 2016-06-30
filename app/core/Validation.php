@@ -7,6 +7,8 @@ class Validation
 
 	public static $validationPassed = true;
 
+	private static $requiresInstances = ['unique'];
+
 	public static function min($name, $data, $rule)
 	{
 		if (strlen($data) < $rule) {
@@ -17,7 +19,7 @@ class Validation
 
 	public static function max($name, $data, $rule)
 	{
-		if (strlen($input) > $rule) {
+		if (strlen($data) > $rule) {
 			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field must have less than ' . $rule . ' characters';
 		}
@@ -25,7 +27,6 @@ class Validation
 
 	public static function unique($name, $data, $rule, $model)
 	{
-
 		$result = $model->find([$name => $data]);
 		if (!empty($result)) {
 			self::$validationPassed = false;
@@ -60,5 +61,10 @@ class Validation
 	public static function getErrors()
 	{
 		return self::$errors;
+	}
+
+	public static function getRequiresInstances()
+	{
+		return self::$requiresInstances;
 	}
 }
