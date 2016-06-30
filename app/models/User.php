@@ -9,12 +9,50 @@ class User extends Model
 		'username' => [
 			'required' => true,
 			'unique' => true,
-			'min' => 5,
-			'max' => 6,
+			'min' => 6,
+			'max' => 16
+		],
+		'email' => [
+			'required' => true,
 			'email' => true,
-			'matches' => 'username2'
+			'unique' => true,
+			
+		],
+		'password' => [
+			'required' => true,
+			'matches' => 'confirm_password',
+			'min' => 6,
+			'max' => 16
 		]
-
 	];
+
+	public function auth($login, $password)
+	{
+		$user =  $this->find([
+			'(' => true,
+			'username' => $login,
+			'OR' => true,
+			'email' => $login,
+			')' => true,
+			'AND' => true,
+			'password' => $password
+		]);
+
+		if ($user) {
+			return $user;
+		}
+	}
+
+	public function authRules()
+	{
+		return [
+			'login' => [
+				'required' => true
+			],
+			'password' => [
+				'required' => true
+			]
+		];
+	}
 
 }

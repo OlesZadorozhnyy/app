@@ -7,9 +7,11 @@ class Model extends Table
 
 	public $validationRules = [];
 
-	public function validate($post = [])
+	public function validate($post = [], $rules = null)
 	{
-		$rules = $this->validationRules;
+		if (!$rules) {
+			$rules = $this->validationRules;
+		}
 		foreach ($post as $key => $value) {
 			foreach ($rules as $ruleName => $rule) {
 				foreach ($rule as $ruleMethod => $ruleValue) {

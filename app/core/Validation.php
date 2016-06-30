@@ -36,7 +36,7 @@ class Validation
 
 	public static function matches($name, $data, $rule)
 	{
-		if ($data !== $_POST[$rule]) {
+		if ($data !== Request::input($rule)) {
 			self::$validationPassed = false;
 			return self::$errors[$name][] = ucfirst($name) . ' doesn\'t match with ' . ucfirst($rule) . ' field';
 		}

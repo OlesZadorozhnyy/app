@@ -2,6 +2,8 @@
 
 define('HOME', $_SERVER['DOCUMENT_ROOT'] . '/');
 
+session_start();
+
 $settings = [
 	'database' => [
 		'driver' => 'MySQLDriver',
