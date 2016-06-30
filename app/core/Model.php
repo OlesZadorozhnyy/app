@@ -25,7 +25,7 @@ class Model extends Table
 			}
 		}
 
-		return Validation::$validationPassed;
+		return Validation::getResult();
 	}
 
 	public function save($data = [], $where = [])

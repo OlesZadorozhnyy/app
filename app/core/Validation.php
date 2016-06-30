@@ -67,4 +67,9 @@ class Validation
 	{
 		return self::$requiresInstances;
 	}
+
+	public static function getResult()
+	{
+		return self::$validationPassed;
+	}
 }
