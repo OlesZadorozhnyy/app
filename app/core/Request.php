@@ -17,20 +17,21 @@ class Request
 		}	
 	}
 
-	public static function all()
+	public static function getPost()
 	{
 		if (isset($_POST)) {
 			return $_POST;
 		}
 	}
 
-	public static function post()
+	public static function isPost()
 	{
 		return $_SERVER['REQUEST_METHOD'] === 'POST';
 	}
 
-	public static function ajax()
+	public static function isAjax()
 	{
 		return !empty(($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 	}
+
 }

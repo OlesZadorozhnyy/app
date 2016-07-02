@@ -12,4 +12,17 @@ class Helper
 		header('Location: ' . $location);
 		exit();
 	}
+
+	public static function showErrors($errors, $name)
+	{
+		if (array_key_exists($name, $errors)) {
+			$result = '<div>';
+			foreach ($errors[$name] as $error) {
+				$result .= '<p style="color:red;">' . $error . '</p>';
+			}
+			$result .= '</div>';
+
+			return $result;
+		}
+	}
 }

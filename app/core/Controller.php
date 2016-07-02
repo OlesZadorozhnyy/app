@@ -6,6 +6,8 @@ class Controller
 	public $uses = [];
 	public $params = [];
 
+	private $filterRules = ['auth', 'noAuth'];
+
 	public function __construct($controller, $params)
 	{
 		$this->params = $params;
@@ -36,5 +38,32 @@ class Controller
 	public function display($template)
 	{
 		return $this->view->render($template);
+	}
+
+	public function filters()
+	{
+
+	}
+
+	public function beforeAction($action)
+	{
+		$rules = $this->filters();
+		if (isset($rules['auth'])) {
+			foreach ($rules['auth']['pages'] as $page) {
+				if (!Session::exists('user') && $page == $action) {
+					Helper::redirect($rules['auth']['redirect']);
+				}
+				
+			}
+		}
+
+		if (isset($rules['noAuth'])) {
+			foreach ($rules['noAuth']['pages'] as $page) {
+				if (Session::exists('user') && $page == $action) {
+					Helper::redirect($rules['noAuth']['redirect']);
+				}
+				
+			}
+		}
 	}
 }

@@ -3,6 +3,16 @@
 class PostController extends Controller
 {
 
+	public function filters()
+	{
+		return [
+			'auth' => [
+				'pages' => ['create', 'update', 'index'],
+				'redirect' => '/user/login'
+			]
+		];
+	}
+
 	public function actionCreate()
 	{
 

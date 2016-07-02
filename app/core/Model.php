@@ -7,26 +7,29 @@ class Model extends Table
 
 	public $validationRules = [];
 
-	public function validate($post = [], $rules = null)
+	public $scenarios = [];
+
+	public function validate($post = [])
 	{
-		if (!$rules) {
-			$rules = $this->validationRules;
-		}
-		foreach ($post as $key => $value) {
-			foreach ($rules as $ruleName => $rule) {
-				foreach ($rule as $ruleMethod => $ruleValue) {
-					if ($key === $ruleName) {
-						if (in_array($ruleMethod, Validation::getRequiresInstances())) {
-							Validation::$ruleMethod($key, $value, $ruleValue, $this);
-						} else {
-							Validation::$ruleMethod($key, $value, $ruleValue);
+		$rules = $this->validationRules;
+		$scenario = $this->scenario;
+		if (array_key_exists($scenario, $rules)) {		
+			foreach ($post as $key => $value) {
+				foreach ($rules[$scenario] as $ruleName => $rule) {
+					foreach ($rule as $ruleMethod => $ruleValue) {
+						if ($key === $ruleName) {
+							if (in_array($ruleMethod, Validation::getRequiresInstances())) {
+								Validation::$ruleMethod($key, $value, $ruleValue, $this);
+							} else {
+								Validation::$ruleMethod($key, $value, $ruleValue);
+							}
+							
 						}
-						
 					}
 				}
 			}
 		}
-
+	
 		return Validation::getResult();
 	}
 

@@ -37,6 +37,7 @@ class Router
 
 		if (class_exists($controllerName) && method_exists($controllerName, $actionName)) {
 			$this->controller = new $controllerName($this->controller, $this->params);
+			$this->controller->beforeAction($this->action);
 			call_user_func_array([$this->controller, $actionName], $this->params);
 			$this->controller->display($view);
 

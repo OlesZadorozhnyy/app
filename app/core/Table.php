@@ -4,8 +4,6 @@ class Table
 {
 	private $db;
 
-	protected $conditions = ['AND', 'OR', '(', ')'];
-
 	public function __construct()
 	{
 		$driver = Config::get('database.driver');
@@ -15,21 +13,17 @@ class Table
 	public function get($table, $where = [], $orderBy = null, $limit = null)
 	{
 		$sql = "SELECT * FROM " . $table;
-		$result = [
-			'query' => '',
-			'params' => ''
-		];
-
+		$result = [];
 		foreach ($where as $key => $whereItem) {
-			if (in_array($key, $this->conditions)) {
-				$result['query'] .= ' ' . $key . ' ';
-			} else {
-				$result['query'] .= $key . ' = ?';
+			if (!is_numeric($key)) {
+				$result['query'][] = $key . ' = ?';
 				$result['params'][] = $whereItem;
+			} else {
+				$result['query'][] = $whereItem;
 			}
 		}
-
-		$sql .= " WHERE " . $result['query'];
+		$wheres = implode(' AND ', $result['query']);
+		$sql .= " WHERE " . $wheres;
 
 		if (count($orderBy) && is_array($orderBy)) {
 			foreach ($orderBy as $key => $orderByItem) {

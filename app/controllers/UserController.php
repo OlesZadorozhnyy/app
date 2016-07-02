@@ -3,10 +3,25 @@
 class UserController extends Controller
 {
 
+	public function filters()
+	{
+		return [
+			'auth' => [
+				'pages' => ['logout'],
+				'redirect' => '/user/login'
+			],
+			'noAuth' => [
+				'pages' => ['login', 'register'],
+				'redirect' => '/post'
+			]
+		];
+	}
+
 	public function actionRegister()
 	{
-		if (Request::post()) {
-			if (!$this->user->validate(Request::all())) {
+		if (Request::isPost()) {
+			$this->user->scenario = 'register';
+			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
 				$this->user->save([
@@ -22,15 +37,17 @@ class UserController extends Controller
 
 	public function actionLogin()
 	{
-		if(Request::post()) {
-			if (!$this->user->validate(Request::all(), $this->user->authRules())) {
+		if(Request::isPost()) {
+			$this->user->scenario = 'auth';
+			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
-				$user = $this->user->auth(Request::input('login'), Helper::hash(Request::input('password')));
+				$user = $this->user->auth(Request::input('login'), Request::input('password'));
 				if ($user) {
 					Session::set('user.id', $user[0]['id']);
-					Session::set('user.username', $user[0]['username']);
-					Session::set('user.email', $user[0]['email']);
+					Helper::redirect('/post');
+				} else {
+					Session::flash('message', 'Incorrect values');
 				}
 			}
 		}
@@ -40,6 +57,7 @@ class UserController extends Controller
 	public function actionLogOut()
 	{
 		Session::delete('user');
+		Session::flash('message', 'Thanks for visiting!');
 		Helper::redirect('/user/login');
 	}
 }
