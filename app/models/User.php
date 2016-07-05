@@ -49,7 +49,7 @@ class User extends Model
 
 		foreach ($this->authFieldsSearch as $field) {
 			if ($data = $user($field)) {
-				$sessionName = Config::get('session.sessionName') . '.id';
+				$sessionName = Config::get('session.sessionName') . '.' . Config::get('session.user_id');
 				Session::set($sessionName, $data[0]['id']);
 				$this->isLogged = true;
 				return true;

@@ -28,6 +28,16 @@ class PostController extends Controller
 		
 	}
 
+	public function actionMy()
+	{
+
+	}
+
+	public function actionDelete()
+	{
+		
+	}
+
 	public function actionError()
 	{
 		

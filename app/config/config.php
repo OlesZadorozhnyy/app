@@ -18,7 +18,8 @@ $settings = [
 		'defaultErrorAction' => 'error'
 	],
 	'session' => [
-		'sessionName' => 'user'
+		'sessionName' => 'user',
+		'user_id' => 'id'
 	]
 ];
 

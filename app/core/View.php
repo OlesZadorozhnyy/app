@@ -4,6 +4,7 @@ class View
 {
 	private $workingFolder;
 	private $templatesRoot = 'templates';
+	private $partialsFolder = 'partials';
 	private $data = [];
 	private $endFile = '.php'; 
 
@@ -30,9 +31,9 @@ class View
 	{
 		ob_start();
 		extract($this->data);
-		include $this->templatesRoot . '/' . 'header' . $this->endFile;
+		include $this->templatesRoot . '/' . $this->partialsFolder . '/' . 'header' . $this->endFile;
 		include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
-		include $this->templatesRoot . '/' . 'footer' . $this->endFile;
+		include $this->templatesRoot . '/' . $this->partialsFolder . '/' . 'footer' . $this->endFile;
 		$result = ob_get_clean();
 		echo $result;
 	}
