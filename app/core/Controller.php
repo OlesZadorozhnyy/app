@@ -6,7 +6,7 @@ class Controller
 	public $uses = [];
 	public $params = [];
 
-	private $filterRules = ['auth', 'noAuth'];
+	private $filterRules = ['auth', 'guest'];
 
 	public function __construct($controller, $params)
 	{
@@ -57,10 +57,10 @@ class Controller
 			}
 		}
 
-		if (isset($rules['noAuth'])) {
-			foreach ($rules['noAuth']['pages'] as $page) {
+		if (isset($rules['guest'])) {
+			foreach ($rules['guest']['pages'] as $page) {
 				if (Session::exists('user') && $page == $action) {
-					Helper::redirect($rules['noAuth']['redirect']);
+					Helper::redirect($rules['guest']['redirect']);
 				}
 				
 			}

@@ -7,6 +7,8 @@ class User extends Model
 
 	protected $isLogged = false;
 
+	protected $authFieldsSearch = ['username', 'email'];
+
 	public $scenario;
 
 	public $validationRules = [
@@ -45,16 +47,20 @@ class User extends Model
 			return $this->find([$name => $login, 'password' => Helper::hash($password)]);
 		};
 
-		if ($user('username')) {
-			return $user('username');
-		} elseif ($user('email')) {
-			return $user('email');
+		foreach ($this->authFieldsSearch as $field) {
+			if ($data = $user($field)) {
+				$sessionName = Config::get('session.sessionName') . '.id';
+				Session::set($sessionName, $data[0]['id']);
+				$this->isLogged = true;
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public function isLogged()
 	{
-		if (Session::exists('user')) {
+		if (Session::exists(Config::get('session.sessionName'))) {
 			return $this->isLogged = true;
 		}
 	}

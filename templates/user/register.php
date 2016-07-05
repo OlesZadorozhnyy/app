@@ -30,6 +30,9 @@
 		</div>
 
 		<div>
+			<?php if (isset($errors)) :
+				echo Helper::showErrors($errors, 'confirmPassword');
+			endif; ?>
 			<label>Confirm password:</label>
 			<input type="password" name="confirmPassword">
 		</div>

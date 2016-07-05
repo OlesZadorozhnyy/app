@@ -10,7 +10,7 @@ class UserController extends Controller
 				'pages' => ['logout'],
 				'redirect' => '/user/login'
 			],
-			'noAuth' => [
+			'guest' => [
 				'pages' => ['login', 'register'],
 				'redirect' => '/post'
 			]
@@ -42,9 +42,7 @@ class UserController extends Controller
 			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
-				$user = $this->user->auth(Request::input('login'), Request::input('password'));
-				if ($user) {
-					Session::set('user.id', $user[0]['id']);
+				if ($this->user->auth(Request::input('login'), Request::input('password'))) {
 					Helper::redirect('/post');
 				} else {
 					Session::flash('message', 'Incorrect values');
@@ -56,7 +54,7 @@ class UserController extends Controller
 
 	public function actionLogOut()
 	{
-		Session::delete('user');
+		Session::delete(Config::get('session.sessionName'));
 		Session::flash('message', 'Thanks for visiting!');
 		Helper::redirect('/user/login');
 	}

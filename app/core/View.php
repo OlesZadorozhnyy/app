@@ -3,7 +3,7 @@
 class View
 {
 	private $workingFolder;
-	private $temlatesRoot = 'templates';
+	private $templatesRoot = 'templates';
 	private $data = [];
 	private $endFile = '.php'; 
 
@@ -30,7 +30,9 @@ class View
 	{
 		ob_start();
 		extract($this->data);
-		include $this->temlatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
+		include $this->templatesRoot . '/' . 'header' . $this->endFile;
+		include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
+		include $this->templatesRoot . '/' . 'footer' . $this->endFile;
 		$result = ob_get_clean();
 		echo $result;
 	}

@@ -16,6 +16,9 @@ $settings = [
 		'defaultController' => 'Post',
 		'defaultAction' => 'index',
 		'defaultErrorAction' => 'error'
+	],
+	'session' => [
+		'sessionName' => 'user'
 	]
 ];
 
