@@ -19,7 +19,7 @@ $settings = [
 	],
 	'session' => [
 		'sessionName' => 'user',
-		'user_id' => 'id'
+		'userId' => 'id'
 	]
 ];
 

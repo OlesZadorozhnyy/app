@@ -19,32 +19,34 @@ class PostController extends Controller
 			if (!$this->post->validate(Request::getPost())) {
 				$this->set('errors', $this->post->getErrors());
 			} else {
-				$dataForSave = ['user_id' => Session::get(Config::get('session.sessionName') . '.' . Config::get('session.user_id'))];
-				$dataForSave = array_merge(Helper::setData(['title', 'body', 'lat', 'lng']), $dataForSave);
-				$this->post->save($dataForSave);
-				Session::flash('message', 'Post was created!');
-				Helper::redirect('/post');
+				$data = ['title', 'body', 'lat', 'lng', 'user_id' => Session::get(Config::get('session.userId'))];
+				if($this->post->saveData($data)) {
+					Session::flash('message', 'Post was created!');
+					Helper::redirect('/post');
+				} else {
+					Session::flash('message', 'Oops! Something went wrong!');
+				}
+				
 			}
 		}
 	}
 
 	public function actionUpdate($id)
 	{
+		if (empty($this->post->isOwnerPost($id, Session::get(Config::get('session.userId'))))) {
+			Helper::redirect('/post');
+		}
 		if (Request::isPost()) {
 			if(!$this->post->validate(Request::getPost())) {
 				$this->set('errors', $this->post->getErrors());
 			} else {
-				$dataForSave = ['user_id' => Session::get(Config::get('session.sessionName') . '.' . Config::get('session.user_id'))];
-				$dataForSave = array_merge(Helper::setData(['title', 'body', 'lat', 'lng']), $dataForSave);
-				$this->post->save(
-					$dataForSave, 
-					[
-						'id' => $id, 
-						'user_id' => Session::get(Config::get('session.sessionName') . '.' . Config::get('session.user_id'))
-					]
-				);
-				Session::flash('message', 'Post was updated!');
-				Helper::redirect('/post');
+				$data = ['title', 'body', 'lat', 'lng'];
+				if($this->post->saveData($data, ['id' => $id])) {
+					Session::flash('message', 'Post was updated!');
+					Helper::redirect('/post');
+				} else {
+					Session::flash('message', 'Oops! Something went wrong');
+				}
 			}
 		}
 		$this->set('data', $this->post->getPostById($id));
@@ -58,15 +60,22 @@ class PostController extends Controller
 
 	public function actionMy()
 	{
-		$this->set('posts', $this->post->getMyPosts(Session::get(Config::get('session.sessionName') . '.' . Config::get('session.user_id'))));
+		$this->set('posts', $this->post->getMyPosts(Session::get(Config::get('session.userId'))));
 	}
 
 	public function actionDelete($id)
 	{
-		if (Request::isPost()) {
-			$this->post->deleteRecord(['id' => $id, 'user_id' => Session::get(Config::get('session.sessionName') . '.' . Config::get('session.user_id'))]);
-			Session::flash('message', 'Post was deleted!');
+		if (empty($this->post->isOwnerPost($id, Session::get(Config::get('session.userId'))))) {
 			Helper::redirect('/post');
+		}
+		if (Request::isPost()) {
+			if($this->post->deleteRecord(['id' => $id])) {
+				Session::flash('message', 'Post was deleted!');
+				Helper::redirect('/post');
+			} else {
+				Session::flash('message', 'Oops! Something went wrong!');
+			}
+			
 		}
 		$this->set('id', $id);
 	}

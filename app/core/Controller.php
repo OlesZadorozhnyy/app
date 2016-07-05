@@ -50,7 +50,7 @@ class Controller
 		$rules = $this->filters();
 		if (isset($rules['auth'])) {
 			foreach ($rules['auth']['pages'] as $page) {
-				if (!Session::exists(Config::get('session.sessionName')) && $page == $action) {
+				if (!Session::exists(Config::get('session.userId')) && $page == $action) {
 					Helper::redirect($rules['auth']['redirect']);
 				}
 				
@@ -59,7 +59,7 @@ class Controller
 
 		if (isset($rules['guest'])) {
 			foreach ($rules['guest']['pages'] as $page) {
-				if (Session::exists(Config::get('session.sessionName')) && $page == $action) {
+				if (Session::exists(Config::get('session.userId')) && $page == $action) {
 					Helper::redirect($rules['guest']['redirect']);
 				}
 				

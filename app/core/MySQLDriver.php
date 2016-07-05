@@ -36,7 +36,9 @@ class MySQLDriver implements DatabaseInterface
 		}
 		if ($this->query->execute()) {
 			$this->result = $this->query->fetchAll(PDO::FETCH_ASSOC);
+			return true;
 		}
+		return false;
 	}
 
 	public function getResults()

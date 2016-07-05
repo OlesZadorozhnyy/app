@@ -28,9 +28,12 @@ class Helper
 
 	public static function setData($params = [])
 	{
-		foreach ($params as $param) {
-			$result[$param] = Request::input($param);
+		if (!empty($params)) {
+			foreach ($params as $param) {
+				$info[$param] = Request::input($param);
+			}
+			return $info;
 		}
-		return $result;
+		return false;
 	}
 }

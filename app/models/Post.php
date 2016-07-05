@@ -41,8 +41,28 @@ class Post extends Model
 		return $this->find(['user_id' => $id]);
 	}
 
+	public function isOwnerPost($id, $userId)
+	{
+		return $this->find(['id' => $id, 'user_id' => $userId]);
+	}
+
 	public function getPostById($id)
 	{
 		return $this->findById($id);
+	}
+
+	public function saveData($params = [], $where = [])
+	{
+		$data = [];
+		$result = [];
+		foreach ($params as $key => $param) {
+			if (is_numeric($key)) {
+				$data[] = $param;
+			} else {
+				$result[$key] = $param;
+			}
+		}
+		$result = array_merge(Helper::setData($data), $result);
+		return $this->save($result, $where);	
 	}
 }

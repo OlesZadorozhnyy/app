@@ -48,9 +48,9 @@ class User extends Model
 		};
 
 		foreach ($this->authFieldsSearch as $field) {
-			if ($data = $user($field)) {
-				$sessionName = Config::get('session.sessionName') . '.' . Config::get('session.user_id');
-				Session::set($sessionName, $data[0]['id']);
+			$data = $user($field);
+			if (!empty($data)) {
+				Session::set(Config::get('session.userId'), $data[0]['id']);
 				$this->isLogged = true;
 				return true;
 			}
@@ -60,7 +60,7 @@ class User extends Model
 
 	public function isLogged()
 	{
-		if (Session::exists(Config::get('session.sessionName'))) {
+		if (Session::exists(Config::get('session.userId'))) {
 			return $this->isLogged = true;
 		}
 	}

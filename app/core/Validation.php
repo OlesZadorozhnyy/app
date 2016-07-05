@@ -60,7 +60,7 @@ class Validation
 
 	public static function numeric($name, $data, $rule)
 	{
-		if (!preg_match('/^[0-9.]+$/', $data)) {
+		if (!filter_var($data, FILTER_VALIDATE_FLOAT)) {
 			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Field must contain only numbers';
 		}

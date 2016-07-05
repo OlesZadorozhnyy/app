@@ -24,13 +24,17 @@ class UserController extends Controller
 			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
-				$this->user->save([
+				if($this->user->save([
 					'username' => Request::input('username'), 
 					'email' => Request::input('email'),
 					'password' => Helper::hash(Request::input('password'))
-				]);
-				Session::flash('message', 'Congratulations! You have been registered!');
-				Helper::redirect('/user/login');
+				])) {
+					Session::flash('message', 'Congratulations! You have been registered!');
+					Helper::redirect('/user/login');
+				} else {
+					Session::flash('message', 'Oops! Something went wrong!');
+				}
+				
 			}
 		}
 	}
@@ -42,6 +46,7 @@ class UserController extends Controller
 			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
+				echo '1';
 				if ($this->user->auth(Request::input('login'), Request::input('password'))) {
 					Helper::redirect('/post');
 				} else {
@@ -54,7 +59,7 @@ class UserController extends Controller
 
 	public function actionLogOut()
 	{
-		Session::delete(Config::get('session.sessionName'));
+		Session::delete(Config::get('session.userId'));
 		Session::flash('message', 'Thanks for visiting!');
 		Helper::redirect('/user/login');
 	}
