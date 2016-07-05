@@ -25,4 +25,12 @@ class Helper
 			return $result;
 		}
 	}
+
+	public static function setData($params = [])
+	{
+		foreach ($params as $param) {
+			$result[$param] = Request::input($param);
+		}
+		return $result;
+	}
 }

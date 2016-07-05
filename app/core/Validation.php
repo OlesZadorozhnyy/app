@@ -58,6 +58,14 @@ class Validation
 		}
 	}
 
+	public static function numeric($name, $data, $rule)
+	{
+		if (!preg_match('/^[0-9.]+$/', $data)) {
+			self::$validationPassed = false;
+			return self::$errors[$name][] = 'Field must contain only numbers';
+		}
+	}
+
 	public static function getErrors()
 	{
 		return self::$errors;

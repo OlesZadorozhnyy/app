@@ -89,7 +89,7 @@ class Table
         
 		foreach ($where as $key => $value) {
 			if ($values) {
-				$values .= ', ' . $key . '=?';
+				$values .= ' AND ' . $key . '=?';
 			} else {
 				$values = $key . '=?';
 			}
