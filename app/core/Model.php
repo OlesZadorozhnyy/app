@@ -59,7 +59,7 @@ class Model extends Table
 
 	public function findById($id)
 	{
-		return $this->get($this->tableName, ['id' => $id]);
+		return $this->get($this->tableName, ['id' => $id])[0];
 	}
 
 	public function getTable()

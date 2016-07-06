@@ -4,8 +4,8 @@ class View
 {
 	private $workingFolder;
 	private $templatesRoot = 'templates';
-	private $partialsFolder = 'partials';
 	private $data = [];
+	private $layoutFile = 'master';
 	private $endFile = '.php'; 
 
 	public function __construct($workingFolder)
@@ -30,10 +30,9 @@ class View
 	public function render($template)
 	{
 		ob_start();
+		$this->set('content', $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile);
 		extract($this->data);
-		include $this->templatesRoot . '/' . $this->partialsFolder . '/' . 'header' . $this->endFile;
-		include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
-		include $this->templatesRoot . '/' . $this->partialsFolder . '/' . 'footer' . $this->endFile;
+		include $this->templatesRoot . '/' . $this->layoutFile . $this->endFile;
 		$result = ob_get_clean();
 		echo $result;
 	}

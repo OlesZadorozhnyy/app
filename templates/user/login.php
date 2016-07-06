@@ -1,36 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Auth</title>
-</head>
-<body>
-	<?php if(Session::exists('message')) : ?>
-		<div class="message"><?=Session::flash('message')?></div>
-	<?php endif; ?>
+<?php if(Session::exists('message')) : ?>
+	<div class="message"><?=Session::flash('message')?></div>
+<?php endif; ?>
 
-	
-	<form method="POST" action="/user/login">
-		<div>
+<div class="row">
+	<form class="form-horizontal" method="POST" action="/user/login">
+		<div class="form-group">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'login');
 			endif; ?>
-			<label>Username or E-mail:</label>
-			<input type="text" name="login">
+			<label for="login">Username or E-mail:</label>
+				<input class="form-control" id="login" type="text" name="login">
 		</div>
 		
-		<div>
+		<div class="form-group">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'password');
 			endif; ?>
-			<label>Password:</label>
-			<input type="password" name="password">
+			<label for="password">Password:</label>
+			<input class="form-control" id="password" type="password" name="password">
 		</div>
 		
-		<div>
-			<input type="submit" value="Log In">
+		<div class="form-group">
+			<input class="btn btn-success" type="submit" value="Log In">
 		</div>
 	</form>
 
-	<a href="/user/register">Go to register!</a>
-</body>
-</html>
+	<a class="btn btn-primary" href="/user/register">Go to register!</a>
+</div>

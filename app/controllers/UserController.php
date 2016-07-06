@@ -19,8 +19,9 @@ class UserController extends Controller
 
 	public function actionRegister()
 	{
+		$this->set('title', 'Registration');
+		$this->user->scenario = 'register';
 		if (Request::isPost()) {
-			$this->user->scenario = 'register';
 			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
@@ -41,12 +42,12 @@ class UserController extends Controller
 
 	public function actionLogin()
 	{
+		$this->set('title', 'Auth');
+		$this->user->scenario = 'auth';
 		if(Request::isPost()) {
-			$this->user->scenario = 'auth';
 			if (!$this->user->validate(Request::getPost())) {
 				$this->set('errors', $this->user->getErrors());
 			} else {
-				echo '1';
 				if ($this->user->auth(Request::input('login'), Request::input('password'))) {
 					Helper::redirect('/post');
 				} else {

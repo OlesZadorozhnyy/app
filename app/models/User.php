@@ -60,9 +60,7 @@ class User extends Model
 
 	public function isLogged()
 	{
-		if (Session::exists(Config::get('session.userId'))) {
-			return $this->isLogged = true;
-		}
+		return $this->isLogged;
 	}
 
 }

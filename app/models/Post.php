@@ -25,11 +25,8 @@ class Post extends Model
 				'required' => true,
 				'numeric' => true
 			]
-
-
 		]
 	];
-
 
 	public function getAllPosts()
 	{
@@ -51,18 +48,14 @@ class Post extends Model
 		return $this->findById($id);
 	}
 
-	public function saveData($params = [], $where = [])
+	public function savePost($post, $id = null)
 	{
-		$data = [];
-		$result = [];
-		foreach ($params as $key => $param) {
-			if (is_numeric($key)) {
-				$data[] = $param;
-			} else {
-				$result[$key] = $param;
-			}
+		$where = [];
+		if($id) {
+			$where = ['id' => $id];
+		} else {
+			$post['user_id'] = Session::get(Config::get('session.userId'));
 		}
-		$result = array_merge(Helper::setData($data), $result);
-		return $this->save($result, $where);	
+		return $this->save($post, $where);
 	}
 }
