@@ -31,14 +31,13 @@ class View
 	public function render($template)
 	{
 		ob_start();
-		$file = $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
-		extract($this->data);
-		include $file;
-		$content = ob_get_clean();
 
 		ob_start();
+		extract($this->data);
+		include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
+		$content = ob_get_clean();
+
 		include $this->templatesRoot . '/' . $this->layoutFolder . '/' . $this->layoutFile . $this->endFile;
-		$result = ob_get_clean();
-		echo $result;
+		echo ob_get_clean();
 	}
 }
