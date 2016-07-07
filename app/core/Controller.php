@@ -25,7 +25,7 @@ class Controller
 			}	
 		} else {
 			if (class_exists($controller)) {
-				$this->{lcfirst($controller)} = new $controller;
+				$this->{strtolower($controller)} = new $controller;
 			}
 		}
 	}

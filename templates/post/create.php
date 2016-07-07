@@ -1,1 +1,1 @@
-<?php include 'templates/partials/post.form.php'; ?>
+<?php include 'templates/post/_form.php'; ?>
