@@ -37,7 +37,6 @@ class View
 		$content = ob_get_clean();
 
 		ob_start();
-		extract($this->data);
 		include $this->templatesRoot . '/' . $this->layoutFolder . '/' . $this->layoutFile . $this->endFile;
 		$result = ob_get_clean();
 		echo $result;
