@@ -4,6 +4,8 @@
 	<title><?=$title?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/webroot/css/libs/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/webroot/css/style.css">
+	<script data-main="/webroot/js/app.js" src="/webroot/js/libs/require.js"></script>
 </head>
 <body>
 	<header class="page-header row">
@@ -18,7 +20,6 @@
 	<div class="container">
 		<?php echo $content; ?>
 	</div>
-
 	<footer class="navbar-fixed-bottom text-center">
 		&copy;<?=date('Y')?>
 	</footer>

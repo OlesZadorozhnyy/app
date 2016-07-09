@@ -1,5 +1,24 @@
+<script type="text/javascript">
+	<?php if(isset($data)) : ?>
+		requirejs(['script'], function(script) {
+			script.getPosition();
+		});
+
+	<?php else : ?>
+		requirejs(['script'], function (script) {
+			script.yourLocation();
+		});
+
+	<?php endif; ?>
+</script>
+
+
+<div class="message"></div>
 <div class="row">
 	<form method="POST" class="form-horizontal" action="<?php echo (isset($data)) ? '/post/update/' . $data['id'] : '/post/create';?>">
+
+		<div id="map"></div>
+
 		<div class="form-group">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'title');

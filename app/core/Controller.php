@@ -35,9 +35,9 @@ class Controller
 		return $this->view->set($name, $value);
 	}
 
-	public function display($template)
+	public function display($template, $ajax = false)
 	{
-		return $this->view->render($template);
+		return $this->view->render($template, $ajax);
 	}
 
 	public function filters()
