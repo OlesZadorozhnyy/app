@@ -2,6 +2,7 @@ define(['jquery', 'gmaps'], function() {
 
 
 	var markers = [];
+	var icon = '/webroot/images/marker.png';
 
 	return {
 		initMap: function(lat, lng, zoom) {
@@ -29,7 +30,7 @@ define(['jquery', 'gmaps'], function() {
 			infoWindow.setPosition(pos);
 			infoWindow.setContent(message);
 
-			var marker = new google.maps.Marker({map: map, position: pos});
+			var marker = new google.maps.Marker({map: map, position: pos, icon: icon});
         	marker.addListener('click', function() {
 				infoWindow.open(map, marker);
 			});
@@ -97,7 +98,7 @@ define(['jquery', 'gmaps'], function() {
 			var that = this;
 
 			google.maps.event.addListener(map, 'click', function(event) {
-				
+
 				for (var i = 0; i < markers.length; i++) {
 					markers[i].setMap(null);
 				}
