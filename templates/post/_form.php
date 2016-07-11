@@ -1,24 +1,9 @@
-<script type="text/javascript">
-	<?php if(isset($data)) : ?>
-		requirejs(['script'], function(script) {
-			script.getPosition();
-		});
-
-	<?php else : ?>
-		requirejs(['script'], function (script) {
-			script.yourLocation();
-		});
-
-	<?php endif; ?>
-</script>
-
-
-<div class="message"></div>
+<div id="message"></div>
 <div class="row">
 	<form method="POST" class="form-horizontal" action="<?php echo (isset($data)) ? '/post/update/' . $data['id'] : '/post/create';?>">
 
 		<div id="map"></div>
-
+		<input type="hidden" id="postId" value="<?php echo (isset($data)) ? $data['id'] : ''; ?>">
 		<div class="form-group">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'title');
@@ -58,3 +43,18 @@
 
 	<a class="btn btn-primary" href="/post">Go Back</a>
 </div>
+<script data-main="/webroot/js/app.js" src="/webroot/js/libs/require.js"></script>
+
+<!-- <script type="text/javascript">
+	<?php if(isset($data)) : ?>
+		requirejs(['app', 'script'], function(script) {
+			script.getPosition();
+		});
+
+	<?php else : ?>
+		requirejs(['app', 'script'], function (script) {
+			script.yourLocation();
+		});
+
+	<?php endif; ?>
+</script> -->

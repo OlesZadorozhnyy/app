@@ -1,21 +1,71 @@
-define(['jquery', 'gmaps'], function() {
-
+define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3YS0z3fHZfJ-U'], function() {
 
 	var markers = [];
+
 	var icon = '/webroot/images/marker.png';
 
+	var inputs = {
+		lat: document.getElementById('lat'),
+		lng: document.getElementById('lng'),
+		message: document.getElementById('message'),
+		currentPage: document.getElementById('postId')
+	};
+
+	var defaultCoords = {
+		lat: 50.000,
+		lng: 25.000,
+		zoom: 6
+	};
+
 	return {
+
+		init: function() {
+			this.initBindinds();
+			console.log(inputs.currentPage.value);
+			if (inputs.currentPage.value.length > 0) {
+				this.getPosition();
+			} else {
+				this.yourLocation();
+			}
+		},
+
+		initBindinds: function() {
+			var that = this;
+			var inputArray = [inputs.lat, inputs.lng];
+
+			for (var i = 0; i < inputArray.length; i++) {
+				inputArray[i].addEventListener('change', function() {
+					coords = {
+						lat: Number(inputs.lat.value),
+						lng: Number(inputs.lng.value)
+					};
+					if (that.inRange(-90, coords.lat, 90) && that.inRange(-180, coords.lng, 180)) {
+						
+						map = that.initMap(coords.lat, coords.lng);
+
+						that.addMarker(coords, map);
+						that.newCoords(map);
+					} else {
+						alert('Incorrect coordinates :(');
+					}
+					
+				});
+			}
+
+			that.newCoords(that.initMap());
+		},
+
 		initMap: function(lat, lng, zoom) {
 
 			if (!lat) {
-				lat = 50.000;
+				lat = defaultCoords.lat;
 			}
 			if (!lng) {
-				lng = 25.000;
+				lng = defaultCoords.lng;
 			}
 				
 			if (!zoom) {
-				zoom = 6;
+				zoom = defaultCoords.zoom;
 			}	
 
 			return new google.maps.Map(document.getElementById('map'), {
@@ -24,17 +74,8 @@ define(['jquery', 'gmaps'], function() {
 			});
 		},
 
-		addMarker: function(pos, message, map) {
-
-			var infoWindow = new google.maps.InfoWindow();
-			infoWindow.setPosition(pos);
-			infoWindow.setContent(message);
-
+		addMarker: function(pos, map) {
 			var marker = new google.maps.Marker({map: map, position: pos, icon: icon});
-        	marker.addListener('click', function() {
-				infoWindow.open(map, marker);
-			});
-
 			markers.push(marker);
 		},
 
@@ -52,18 +93,18 @@ define(['jquery', 'gmaps'], function() {
 
 					map = that.initMap(pos.lat, pos.lng);
 
-					that.addMarker(pos, 'Location found', map);
+					that.addMarker(pos, map);
 
-					$('#lng').val(pos.lng);
-					$('#lat').val(pos.lat);
+					inputs.lng.value = pos.lng;
+					inputs.lat.value = pos.lat;
 				}, function(error) {
 					if (error.code == error.PERMISSION_DENIED) {
-						$('.message').html('Click on map to define position');
-						that.newCoords('', map);
+						inputs.message.innerHTML = 'Click on map to define position';
+						that.newCoords(map);
 					}
 				});
 			} else {
-				$('.message').html('Your browser doesn\'t support geolocation');
+				inputs.message.innerHTML = 'Your browser doesn\'t support geolocation';
 			}
 		},
 
@@ -71,30 +112,18 @@ define(['jquery', 'gmaps'], function() {
 			var that = this;
 
 			var coords = {
-				lat: Number($('#lat').val()),
-				lng: Number($('#lng').val())
+				lat: Number(inputs.lat.value),
+				lng: Number(inputs.lng.value)
 			};
 
 			var map = that.initMap(coords.lat, coords.lng);
 
-			that.addMarker(coords, $('#title').val(), map);
+			that.addMarker(coords, map);
 
-			$('#lat, #lng').change(function() {
-				coords = {
-					lat: Number($('#lat').val()),
-					lng: Number($('#lng').val())
-				};
-				map = that.initMap(coords.lat, coords.lng);
-
-				that.addMarker(coords, $('#title').val(), map);
-
-				that.newCoords($('#title').val(), map);
-			});
-
-				that.newCoords($('#title').val(), map);	
+			that.newCoords(map);	
 		},
 
-		newCoords: function(message, map) {
+		newCoords: function(map) {
 			var that = this;
 
 			google.maps.event.addListener(map, 'click', function(event) {
@@ -102,10 +131,20 @@ define(['jquery', 'gmaps'], function() {
 				for (var i = 0; i < markers.length; i++) {
 					markers[i].setMap(null);
 				}
-				that.addMarker(event.latLng, message, map);
-				$('#lng').val(event.latLng.lng);
-				$('#lat').val(event.latLng.lat);
+				that.addMarker(event.latLng, map);
+
+				inputs.lng.value = event.latLng.lng();
+				inputs.lat.value = event.latLng.lat();
 			});
+		},
+
+		inRange : function(min, number, max) {
+			if (!isNaN(number) && (number >= min) && (number <= max)) {
+				return true;
+			} else {
+				return false;
+			}
 		}
+    
 	}
 });

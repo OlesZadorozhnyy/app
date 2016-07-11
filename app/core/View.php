@@ -28,24 +28,17 @@ class View
 		}
 	}
 
-	public function render($template, $ajax = false)
+	public function render($template)
 	{
-		if ($ajax) {
-			ob_start();
-			extract($this->data);
-			include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
-			echo ob_get_clean();
-		} else {
-			ob_start();
+		ob_start();
 
-			ob_start();
-			extract($this->data);
-			include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
-			$content = ob_get_clean();
+		ob_start();
+		extract($this->data);
+		include $this->templatesRoot . '/' . $this->workingFolder . '/' . $template . $this->endFile;
+		$content = ob_get_clean();
 
-			include $this->templatesRoot . '/' . $this->layoutFolder . '/' . $this->layoutFile . $this->endFile;
-			echo ob_get_clean();
-		}
+		include $this->templatesRoot . '/' . $this->layoutFolder . '/' . $this->layoutFile . $this->endFile;
+		echo ob_get_clean();
 		
 	}
 }
