@@ -25,7 +25,7 @@
 				echo Helper::showErrors($errors, 'lat');
 			endif; ?>
 			<label for="lat">Lat:</label>
-			<input type="text" class="form-control" id="lat" name="lat" value="<?php echo (isset($data)) ? $data['lat'] : Request::input('lat');?>">
+			<input type="text" class="form-control coords" id="lat" name="lat" value="<?php echo (isset($data)) ? $data['lat'] : Request::input('lat');?>">
 		</div>
 
 		<div class="form-group">
@@ -33,7 +33,7 @@
 				echo Helper::showErrors($errors, 'lng');
 			endif; ?>
 			<label for="lng">Lng:</label>
-			<input type="text" class="form-control" id="lng" name="lng" value="<?php echo (isset($data)) ? $data['lng'] : Request::input('lng');?>">
+			<input type="text" class="form-control coords" id="lng" name="lng" value="<?php echo (isset($data)) ? $data['lng'] : Request::input('lng');?>">
 		</div>
 
 		<div>
@@ -43,18 +43,4 @@
 
 	<a class="btn btn-primary" href="/post">Go Back</a>
 </div>
-<script data-main="/webroot/js/app.js" src="/webroot/js/libs/require.js"></script>
-
-<!-- <script type="text/javascript">
-	<?php if(isset($data)) : ?>
-		requirejs(['app', 'script'], function(script) {
-			script.getPosition();
-		});
-
-	<?php else : ?>
-		requirejs(['app', 'script'], function (script) {
-			script.yourLocation();
-		});
-
-	<?php endif; ?>
-</script> -->
+<script data-main="/webroot/js/script.js" src="/webroot/js/libs/require.js"></script>

@@ -1,40 +1,39 @@
 define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3YS0z3fHZfJ-U'], function() {
 
-	var markers = [];
+	var FormModule = function() {
 
-	var icon = '/webroot/images/marker.png';
+		var lastMarker = null;
 
-	var inputs = {
-		lat: document.getElementById('lat'),
-		lng: document.getElementById('lng'),
-		message: document.getElementById('message'),
-		currentPage: document.getElementById('postId')
-	};
+		var icon = '/webroot/images/marker.png';
 
-	var defaultCoords = {
-		lat: 50.000,
-		lng: 25.000,
-		zoom: 6
-	};
+		var inputs = {
+			lat: document.getElementById('lat'),
+			lng: document.getElementById('lng'),
+			message: document.getElementById('message'),
+			currentPage: document.getElementById('postId'),
+			coords: document.getElementsByClassName('coords')
+		};
 
-	return {
+		var defaultCoords = {
+			lat: 50.000,
+			lng: 25.000,
+			zoom: 6
+		};
 
-		init: function() {
+		this.init = function() {
 			this.initBindinds();
-			console.log(inputs.currentPage.value);
 			if (inputs.currentPage.value.length > 0) {
 				this.getPosition();
 			} else {
 				this.yourLocation();
 			}
-		},
+		};
 
-		initBindinds: function() {
+		this.initBindinds = function() {
 			var that = this;
-			var inputArray = [inputs.lat, inputs.lng];
 
-			for (var i = 0; i < inputArray.length; i++) {
-				inputArray[i].addEventListener('change', function() {
+			for (var i = 0; i < inputs.coords.length; i++) {
+				inputs.coords[i].addEventListener('change', function() {
 					coords = {
 						lat: Number(inputs.lat.value),
 						lng: Number(inputs.lng.value)
@@ -53,9 +52,9 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 			}
 
 			that.newCoords(that.initMap());
-		},
+		};
 
-		initMap: function(lat, lng, zoom) {
+		this.initMap = function(lat, lng, zoom) {
 
 			if (!lat) {
 				lat = defaultCoords.lat;
@@ -72,14 +71,14 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 				center: {lat: lat, lng: lng},
 				zoom: zoom
 			});
-		},
+		};
 
-		addMarker: function(pos, map) {
+		this.addMarker = function(pos, map) {
 			var marker = new google.maps.Marker({map: map, position: pos, icon: icon});
-			markers.push(marker);
-		},
+			lastMarker = marker;
+		};
 
-		yourLocation: function() {
+		this.yourLocation = function() {
 			var that = this;
 
 			var map = that.initMap();
@@ -106,9 +105,9 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 			} else {
 				inputs.message.innerHTML = 'Your browser doesn\'t support geolocation';
 			}
-		},
+		};
 
-		getPosition: function() {
+		this.getPosition = function() {
 			var that = this;
 
 			var coords = {
@@ -121,30 +120,33 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 			that.addMarker(coords, map);
 
 			that.newCoords(map);	
-		},
+		};
 
-		newCoords: function(map) {
+		this.newCoords = function(map) {
 			var that = this;
 
 			google.maps.event.addListener(map, 'click', function(event) {
-
-				for (var i = 0; i < markers.length; i++) {
-					markers[i].setMap(null);
+				if (lastMarker) {
+					lastMarker.setMap(null);
 				}
+
 				that.addMarker(event.latLng, map);
 
 				inputs.lng.value = event.latLng.lng();
 				inputs.lat.value = event.latLng.lat();
 			});
-		},
+		};
 
-		inRange : function(min, number, max) {
+		this.inRange = function(min, number, max) {
 			if (!isNaN(number) && (number >= min) && (number <= max)) {
 				return true;
 			} else {
 				return false;
 			}
-		}
-    
+		};
+	    
+		return this.init();
 	}
+
+	return FormModule();
 });
