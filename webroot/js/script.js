@@ -32,8 +32,9 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 		this.initBindinds = function() {
 			var that = this;
 
-			for (var i = 0; i < inputs.coords.length; i++) {
-				inputs.coords[i].addEventListener('change', function() {
+			document.addEventListener('change', function(event) {
+
+				if (event.target.getElementsByClassName('coords')) {
 					coords = {
 						lat: Number(inputs.lat.value),
 						lng: Number(inputs.lng.value)
@@ -47,9 +48,8 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 					} else {
 						alert('Incorrect coordinates :(');
 					}
-					
-				});
-			}
+				}
+			});
 
 			that.newCoords(that.initMap());
 		};
