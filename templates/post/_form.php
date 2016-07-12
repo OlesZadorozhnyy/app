@@ -4,7 +4,7 @@
 
 		<div id="map"></div>
 		<input type="hidden" id="postId" value="<?php echo (isset($data)) ? $data['id'] : ''; ?>">
-		<div class="form-group">
+		<div class="form-group title">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'title');
 			endif; ?>
@@ -12,7 +12,7 @@
 			<input type="text" class="form-control" id="title" name="title" value="<?php echo (isset($data)) ? $data['title'] : Request::input('title');?>">
 		</div>
 
-		<div class="form-group">
+		<div class="form-group body">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'body');
 			endif; ?>
@@ -20,7 +20,7 @@
 			<input type="text" class="form-control" id="body" name="body" value="<?php echo (isset($data)) ? $data['body'] : Request::input('body');?>">
 		</div>
 
-		<div class="form-group">
+		<div class="form-group lat">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'lat');
 			endif; ?>
@@ -28,7 +28,7 @@
 			<input type="text" class="form-control coords" id="lat" name="lat" value="<?php echo (isset($data)) ? $data['lat'] : Request::input('lat');?>">
 		</div>
 
-		<div class="form-group">
+		<div class="form-group lng">
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'lng');
 			endif; ?>
@@ -43,4 +43,4 @@
 
 	<a class="btn btn-primary" href="/post">Go Back</a>
 </div>
-<script data-main="/webroot/js/script.js" src="/webroot/js/libs/require.js"></script>
+<script data-main="/webroot/js/post.form.js" src="/webroot/js/libs/require.js"></script>
