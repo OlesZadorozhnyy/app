@@ -63,16 +63,6 @@ define(['gmaps'], function() {
 			} else {
 				return false;
 			}
-		},
-
-		getPosition: function(coords) {
-
-			var coords = coords || {
-				lat: Number(elements.lat.value),
-				lng: Number(elements.lng.value)
-			};
-
-			this.addMarker(coords);
 		}
 
 	}

@@ -18,7 +18,8 @@ define(['gmaps', 'mapModule'], function(gmaps, mapModule) {
 			map = mapModule.initMap();
 			this.initBindinds();
 			if (elements.postId.value.length > 0) {
-				mapModule.getPosition();
+				var coords = { lat: Number(elements.lat.value), lng: Number(elements.lng.value) };
+				mapModule.addMarker(coords);
 			} else {
 				this.yourLocation();
 			}
