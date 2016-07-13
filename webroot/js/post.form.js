@@ -38,7 +38,7 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 		var errorBlocks = { 'lat': null, 'lng': null };
 
 		this.init = function() {
-			this.initMap();
+			map = this.initMap();
 			this.initBindinds();
 			if (elements.postId.value.length > 0) {
 				this.getPosition();
@@ -52,70 +52,62 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 
 			document.addEventListener('change', function(event) {
 				if (event.target.getElementsByClassName('coords')) {
-					coords = {
+
+					var blockForError = document.getElementsByClassName(event.target.name+'-error')[0];
+					blockForError.innerHTML = 'Incorrect coordinates :(';
+					blockForError.style.display = 'none';
+					
+					var coords = {
 						'lat': Number(elements.lat.value),
 						'lng': Number(elements.lng.value)
 					};
 
-					var rules = coordinateRules[event.target.name];
-
-					if (that.inRange(coordinateRules['lat'].min, coords.lat, coordinateRules['lat'].max) && that.inRange(coordinateRules['lng'].min, coords.lng, coordinateRules['lng'].max)) {
-						map.setCenter(coords);
-
-						if (lastMarker) {
-							lastMarker.setMap(null);
-						}
-
-						if (errorBlocks[event.target.name]) {
-							document.getElementsByClassName(event.target.name)[0].removeChild(errorBlocks[event.target.name]);
-
-							errorBlocks[event.target.name] = null;
-						}
+					if (that.inRange(coords.lat, 'lat') && that.inRange(coords.lng, 'lng')) {
 
 						that.addMarker(coords);
-						that.newCoords();
-					} else if (!that.inRange(rules.min, coords[event.target.name], rules.max)) {
 
-						if (!errorBlocks[event.target.name]) {
-							var blockForError = document.createElement('div');
-							blockForError.innerHTML = 'Incorrect coordinates :(';
-							blockForError.className = 'error';
+					} else {
 
-							var parentBlock = document.getElementsByClassName(event.target.name)[0];
-
-							parentBlock.insertBefore(blockForError, parentBlock.firstChild);
-
+						if (!that.inRange(coords[event.target.name], event.target.name)) {
+							blockForError.style.display = 'block';
 							errorBlocks[event.target.name] = blockForError;
+						} else {
+							blockForError.style.display = 'none';
+							errorBlocks[event.target.name] = null;					
 						}
-					} else if(that.inRange(rules.min, coords[event.target.name], rules.max)) {
 
-						if (errorBlocks[event.target.name]) {
-							document.getElementsByClassName(event.target.name)[0].removeChild(errorBlocks[event.target.name]);
-							errorBlocks[event.target.name] = null;
-						}
 					}
 				}
 			});
 
-			that.newCoords();
+
+			google.maps.event.addListener(map, 'click', function(event) {
+
+				that.addMarker(event.latLng);
+
+				elements.lng.value = event.latLng.lng();
+				elements.lat.value = event.latLng.lat();
+			});
 		};
 
 		this.initMap = function(lat, lng, zoom) {
 
 			var lat = lat || defaultCoords.lat;
-
 			var lng = lng || defaultCoords.lng;
-
 			var zoom = zoom || defaultCoords.zoom;	
 
-			return map = new google.maps.Map(elements.map, {
+			return new google.maps.Map(elements.map, {
 				center: {lat: lat, lng: lng},
 				zoom: zoom
 			});
 		};
 
 		this.addMarker = function(pos) {
+			if (lastMarker) {
+				lastMarker.setMap(null);
+			}
 			var marker = new google.maps.Marker({map: map, position: pos, icon: icon});
+			map.setCenter(pos);
 			lastMarker = marker;
 		};
 
@@ -129,7 +121,6 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 						lng: position.coords.longitude
 					};
 
-					map.setCenter(pos);
 					that.addMarker(pos);
 
 					elements.lng.value = pos.lng;
@@ -146,36 +137,17 @@ define(['https://maps.googleapis.com/maps/api/js?key=AIzaSyDGcxjhMS-kIxUVUb1NwZ3
 
 		this.getPosition = function() {
 			var that = this;
-
 			var coords = {
 				lat: Number(elements.lat.value),
 				lng: Number(elements.lng.value)
 			};
 
-			map.setCenter(coords);
-
 			that.addMarker(coords);
-
-			that.newCoords();	
 		};
 
-		this.newCoords = function() {
-			var that = this;
+		this.inRange = function(value, type) {
 
-			google.maps.event.addListener(map, 'click', function(event) {
-				if (lastMarker) {
-					lastMarker.setMap(null);
-				}
-
-				that.addMarker(event.latLng);
-
-				elements.lng.value = event.latLng.lng();
-				elements.lat.value = event.latLng.lat();
-			});
-		};
-
-		this.inRange = function(min, number, max) {
-			if (!isNaN(number) && (number >= min) && (number <= max)) {
+			if (!isNaN(value) && (value >= coordinateRules[type].min) && (value <= coordinateRules[type].max)) {
 				return true;
 			} else {
 				return false;

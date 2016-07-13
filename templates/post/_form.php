@@ -24,6 +24,7 @@
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'lat');
 			endif; ?>
+			<div class="lat-error error"></div>
 			<label for="lat">Lat:</label>
 			<input type="text" class="form-control coords" id="lat" name="lat" value="<?php echo (isset($data)) ? $data['lat'] : Request::input('lat');?>">
 		</div>
@@ -32,6 +33,7 @@
 			<?php if (isset($errors)) :
 				echo Helper::showErrors($errors, 'lng');
 			endif; ?>
+			<div class="lng-error error"></div>
 			<label for="lng">Lng:</label>
 			<input type="text" class="form-control coords" id="lng" name="lng" value="<?php echo (isset($data)) ? $data['lng'] : Request::input('lng');?>">
 		</div>
