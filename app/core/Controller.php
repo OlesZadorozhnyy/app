@@ -6,6 +6,8 @@ class Controller
 	public $uses = [];
 	public $params = [];
 
+	public $displayView = true;
+
 	private $filterRules = ['auth', 'guest'];
 
 	public function __construct($controller, $params)

@@ -39,7 +39,10 @@ class Router
 			$this->controller = new $controllerName($this->controller, $this->params);
 			$this->controller->beforeAction($this->action);
 			call_user_func_array([$this->controller, $actionName], $this->params);
-			$this->controller->display($view);
+
+			if ($this->controller->displayView) {
+				$this->controller->display($view);
+			}
 
 		} else {
 			$controllerName = ucfirst(Config::get('router.defaultController')) . 'Controller';

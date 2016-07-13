@@ -36,4 +36,9 @@ class Helper
 		}
 		return false;
 	}
+
+	public static function toJSON($data)
+	{
+		return json_encode($data);
+	}
 }

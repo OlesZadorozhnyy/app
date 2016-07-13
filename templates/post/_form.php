@@ -2,7 +2,7 @@
 <div class="row">
 	<form method="POST" class="form-horizontal" action="<?php echo (isset($data)) ? '/post/update/' . $data['id'] : '/post/create';?>">
 
-		<div id="map"></div>
+		<div id="map" class="map-small"></div>
 		<input type="hidden" id="postId" value="<?php echo (isset($data)) ? $data['id'] : ''; ?>">
 		<div class="form-group title">
 			<?php if (isset($errors)) :

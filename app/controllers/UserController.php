@@ -60,6 +60,7 @@ class UserController extends Controller
 
 	public function actionLogOut()
 	{
+		$this->displayView = false;
 		Session::delete(Config::get('session.userId'));
 		Session::flash('message', 'Thanks for visiting!');
 		Helper::redirect('/user/login');

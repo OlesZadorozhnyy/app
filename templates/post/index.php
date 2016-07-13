@@ -6,11 +6,6 @@
 
 	<a class="btn btn-primary" href="/post/my">My posts</a>
 
-	<?php if (count($posts) > 0) : ?>
-		<ol>
-			<?php foreach($posts as $post) : ?>		
-				<li><?=$post['title']?></li>
-			<?php endforeach; ?>
-		</ol>
-	<?php endif; ?>
+	<div id="map" class="map-lrg"></div>
 </div>
+<script data-main="/webroot/js/indexPosts.js" src="/webroot/js/libs/require.js"></script>
