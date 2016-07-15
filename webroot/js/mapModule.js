@@ -42,8 +42,8 @@ define(['gmaps'], function() {
 			});
 		},
 
-		addMarker: function(pos, list) {
-
+		addMarker: function(pos, list, content) {
+			var that = this;
 			var marker = new google.maps.Marker({map: map, position: pos, icon: icon});
 			
 			if (!list) {
@@ -52,6 +52,14 @@ define(['gmaps'], function() {
 				}
 				map.setCenter(pos);
 				lastMarker = marker;
+			} else {
+				var infoWindow = new google.maps.InfoWindow({
+					content: content
+				});
+
+				marker.addListener('click', function() {
+    				infoWindow.open(that.map, marker);
+  				});
 			}
 			
 		},

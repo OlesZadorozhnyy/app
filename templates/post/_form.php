@@ -46,3 +46,4 @@
 	<a class="btn btn-primary" href="/post">Go Back</a>
 </div>
 <script data-main="/webroot/js/post.form.js" src="/webroot/js/libs/require.js"></script>
+<script src="/webroot/js/config.js"></script>
