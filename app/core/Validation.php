@@ -27,7 +27,7 @@ class Validation
 
 	public static function unique($name, $data, $rule, $model)
 	{
-		$result = $model->find([$name => $data]);
+		$result = $model->find(null, [$name => $data]);
 		if (!empty($result)) {
 			self::$validationPassed = false;
 			return self::$errors[$name][] = 'Write another ' . ucfirst($name);

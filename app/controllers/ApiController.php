@@ -5,30 +5,27 @@ class ApiController extends Controller
 
 	public $uses = ['post'];
 
-	public function filters()
-	{
-		return [
-			'auth' => [
-				'pages' => ['posts'],
-				'redirect' => '/user/login'
-			]
-		];
-	}
-
 
 	public function actionPosts()
 	{
 		$this->displayView = false;
 		header('Content-Type: application/json');
 
-		if (Request::isGet()) {
-			$posts['data'] = $this->post->getAllPosts();
-			$posts['success'] = true;
-			http_response_code(200);
+		if (!Request::isAjax() && !Request::isGet()) {
+			Helper::responseCode(500);
+			echo Request::getMethod();
+			$posts['error'] = 'Internal server error';
+		} elseif (!Session::exists(Config::get('session.userId'))) {
+			Helper::responseCode(403);
+			$posts['error'] = 'Permission denied';
+		} elseif ((Request::isGet() && Session::exists(Config::get('session.userId'))) || Request::isAjax()) {
+			Helper::responseCode(200);
+			$posts['posts'] = $this->post->getAllPostsWithCreator();
 		} else {
-			$posts['success'] = false;
-			http_response_code(403);
+			Helper::responseCode(500);
+			$posts['error'] = 'Unexpected error';
 		}
+
 		echo Helper::toJSON($posts);
 	}
 }

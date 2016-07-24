@@ -55,7 +55,6 @@ class PostController extends Controller
 	public function actionIndex()
 	{
 		$this->set('title', 'Index');
-		$this->set('posts', $this->post->getAllPosts());
 	}
 
 	public function actionMy()

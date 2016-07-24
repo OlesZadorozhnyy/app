@@ -41,4 +41,9 @@ class Helper
 	{
 		return json_encode($data);
 	}
+
+	public static function responseCode($number = null)
+	{
+		return http_response_code($number);
+	}
 }

@@ -28,6 +28,8 @@ define(['gmaps'], function() {
 		}
 	};
 
+	var bounds = null;
+
 
 	return {
 
@@ -40,6 +42,10 @@ define(['gmaps'], function() {
 				center: {lat: lat, lng: lng},
 				zoom: zoom
 			});
+		},
+
+		setBounds: function() {
+			return new google.maps.LatLngBounds();
 		},
 
 		addMarker: function(pos, list, content) {
@@ -60,6 +66,7 @@ define(['gmaps'], function() {
 				marker.addListener('click', function() {
     				infoWindow.open(that.map, marker);
   				});
+
 			}
 			
 		},

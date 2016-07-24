@@ -1,63 +1,66 @@
-define(['gmaps', 'mapModule', 'libs/mustache'], function(gmaps, mapModule, mustache) {
+require(['config'], function() {
 
+	require(['gmaps', 'mapModule', 'libs/mustache'], function(gmaps, mapModule, mustache) {
 
-	var PostsModule = function() {
+		var PostsModule = function() {
 
-		var map = null;
+			var map = null;
 
-		var template = '/templates/layouts/infoWindowTemplate.html';
+			var errorMessage = document.getElementById('message-row');
 
-		var templateHTML = null;
+			var templateHTML = document.getElementById('infoWindowPostTemplate').innerHTML;
 
-		this.init = function() {
-			this.loadTemplate();
-			map = mapModule.initMap(null, null, 4);
-			this.parsePosts();
-		};
-
-		this.initBindings = function() {
-
-		};
-
-		this.parsePosts = function() {
-			var that = this;
-			this.ajax('GET', '/api/posts', function(data) {
-				var posts = JSON.parse(data);
-				for (var i = 0; i < Object.keys(posts.data).length; i++) {
-					var coords = { lat: Number(posts.data[i].lat), lng: Number(posts.data[i].lng) };
-					var view = { title: posts.data[i].title, body: posts.data[i].body };
-					mapModule.addMarker(coords, true, mustache.render(that.templateHTML, view));
-				}
-			});
-					
-		};
-
-		this.loadTemplate = function() {
-			var that = this;
-			this.ajax('GET', template, function(html) {
-				that.templateHTML = html;
-			});
-		};
-
-		this.ajax = function(type, url, callback) {
-			var xhr = new XMLHttpRequest;
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && xhr.status == 200) {
-					callback(xhr.responseText);			
-				}
+			this.init = function() {
+				map = mapModule.initMap();
+				this.parsePosts();
 			};
 
-			xhr.open(type, url, true);
-			xhr.send();
+			this.initBindings = function() {
 
+			};
+
+			this.parsePosts = function() {
+				var that = this;
+				this.ajax('GET', '/api/posts', function(data, code) {
+					var data = JSON.parse(data);
+					var bounds = mapModule.setBounds();
+					for (var i = 0; i < Object.keys(data.posts).length; i++) {
+
+						var coords = { lat: Number(data.posts[i].lat), lng: Number(data.posts[i].lng) };
+						var view = { title: data.posts[i].title, body: data.posts[i].body, user: data.posts[i].username };
+						
+						mapModule.addMarker(coords, true, mustache.render(templateHTML, view));
+						
+						bounds.extend(new google.maps.LatLng(coords));
+						map.fitBounds(bounds);
+					}
+					
+				}, function(code) {
+
+					errorMessage.innerHTML = 'Error!';
+				});
+						
+			};
+
+			this.ajax = function(type, url, success, error) {
+				var xhr = new XMLHttpRequest;
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						success(xhr.responseText);			
+					} else if(xhr.readyState == 4 && xhr.status !== 200) {
+						error(xhr.status);
+					}
+				};
+
+				xhr.open(type, url, true);
+				xhr.send();
+
+			};
+
+			return this.init();
 		};
 
+		return PostsModule();
 
-		return this.init();
-	};
-
-	
-
-	return PostsModule();
-
+	});
 });

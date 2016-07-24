@@ -4,16 +4,40 @@ class Table
 {
 	private $db;
 
+	private $staticKeysForJoins = ['type', 'table', 'on'];
+
 	public function __construct()
 	{
 		$driver = Config::get('database.driver');
 		$this->db = new $driver;
 	}
 
-	public function get($table, $where = [], $orderBy = null, $limit = null)
+	private function join($data = [])
 	{
-		$sql = "SELECT * FROM " . $table;
+
+		if ($data) {
+			foreach ($data as $key => $value) {
+				if (!in_array($key, $this->staticKeysForJoins)) {
+					return false;
+				}	
+			}
+			return ' ' . $data['type'] . ' JOIN ' . $data['table'] . ' ON ' . $data['on'];
+		}
+	}
+
+	public function get($table, $columns = null, $join = [], $where = [], $orderBy = null, $limit = null)
+	{
+		if (!$columns) {
+			$columns = '*';
+		}
+
+		$sql = 'SELECT ' . $columns . ' FROM ' . $table;
 		$result = [];
+
+		if ($this->join($join)) {
+			$sql .= $this->join($join);
+		}
+
 		foreach ($where as $key => $whereItem) {
 			if (!is_numeric($key)) {
 				$result['query'][] = $key . ' = ?';
@@ -43,9 +67,16 @@ class Table
 
 	} 
 
-	public function getAll($table)
+	public function getAll($table, $columns = null, $join = [])
 	{
-		$sql = "SELECT * FROM " . $table;
+		if (!$columns) {
+			$columns = '*';
+		}
+		$sql = 'SELECT ' . $columns . ' FROM ' . $table;
+
+		if ($this->join($join)) {
+			$sql .= $this->join($join);
+		}
 		$this->db->executeQuery($sql, null);
 		return $this->db->getResults();
 	}

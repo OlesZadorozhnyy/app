@@ -28,24 +28,28 @@ class Post extends Model
 		]
 	];
 
-	public function getAllPosts()
-	{
-		return $this->find();
-	}
-
 	public function getMyPosts($id)
 	{
-		return $this->find(['user_id' => $id]);
+		return $this->find(null, ['user_id' => $id]);
 	}
 
 	public function isOwnerPost($id, $userId)
 	{
-		return $this->find(['id' => $id, 'user_id' => $userId]);
+		return $this->find(null, ['id' => $id, 'user_id' => $userId]);
 	}
 
 	public function getPostById($id)
 	{
 		return $this->findById($id);
+	}
+
+	public function getAllPostsWithCreator()
+	{
+		return $this->find('user.username, post.*', null, [
+			'type' => 'INNER',
+			'table' => 'user',
+			'on' => 'post.user_id = user.id'
+		]);
 	}
 
 	public function savePost($post, $id = null)

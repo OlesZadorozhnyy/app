@@ -44,7 +44,7 @@ class User extends Model
 	public function auth($login, $password)
 	{
 		$user = function($name) use ($login, $password){
-			return $this->find([$name => $login, 'password' => Helper::hash($password)]);
+			return $this->find(null, [$name => $login, 'password' => Helper::hash($password)]);
 		};
 
 		foreach ($this->authFieldsSearch as $field) {
