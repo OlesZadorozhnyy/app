@@ -25,11 +25,8 @@ class Table
 		}
 	}
 
-	public function get($table, $columns = null, $join = [], $where = [], $orderBy = null, $limit = null)
+	public function get($table, $where = [], $join = [], $columns = '*', $orderBy = null, $limit = null)
 	{
-		if (!$columns) {
-			$columns = '*';
-		}
 
 		$sql = 'SELECT ' . $columns . ' FROM ' . $table;
 		$result = [];
@@ -67,11 +64,9 @@ class Table
 
 	} 
 
-	public function getAll($table, $columns = null, $join = [])
+	public function getAll($table, $join = [], $columns = '*')
 	{
-		if (!$columns) {
-			$columns = '*';
-		}
+
 		$sql = 'SELECT ' . $columns . ' FROM ' . $table;
 
 		if ($this->join($join)) {

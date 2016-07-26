@@ -30,12 +30,12 @@ class Post extends Model
 
 	public function getMyPosts($id)
 	{
-		return $this->find(null, ['user_id' => $id]);
+		return $this->find(['user_id' => $id]);
 	}
 
 	public function isOwnerPost($id, $userId)
 	{
-		return $this->find(null, ['id' => $id, 'user_id' => $userId]);
+		return $this->find(['id' => $id, 'user_id' => $userId]);
 	}
 
 	public function getPostById($id)
@@ -45,11 +45,11 @@ class Post extends Model
 
 	public function getAllPostsWithCreator()
 	{
-		return $this->find('user.username, post.*', null, [
+		return $this->find(null, [
 			'type' => 'INNER',
 			'table' => 'user',
 			'on' => 'post.user_id = user.id'
-		]);
+		], 'user.username, post.*');
 	}
 
 	public function savePost($post, $id = null)

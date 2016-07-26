@@ -15,10 +15,6 @@ require(['config'], function() {
 				this.parsePosts();
 			};
 
-			this.initBindings = function() {
-
-			};
-
 			this.parsePosts = function() {
 				var that = this;
 				this.ajax('GET', '/api/posts', function(data, code) {
@@ -45,9 +41,11 @@ require(['config'], function() {
 			this.ajax = function(type, url, success, error) {
 				var xhr = new XMLHttpRequest;
 				xhr.onreadystatechange = function() {
-					if (xhr.readyState == 4 && xhr.status == 200) {
+					if (xhr.readyState !== 4) return;
+
+					if (xhr.status == 200) {
 						success(xhr.responseText);			
-					} else if(xhr.readyState == 4 && xhr.status !== 200) {
+					} else {
 						error(xhr.status);
 					}
 				};

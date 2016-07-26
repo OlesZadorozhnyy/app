@@ -47,19 +47,19 @@ class Model extends Table
 		return $this->delete($this->tableName, $params);
 	}
 
-	public function find($columns = null, $params = [], $join = [])
+	public function find($params = [], $join = [], $columns = '*')
 	{
 		if (empty($params)) {
-			return $this->getAll($this->tableName, $columns, $join);
+			return $this->getAll($this->tableName, $join, $columns);
 		} else {
-			return $this->get($this->tableName, $columns, $join, $params);
+			return $this->get($this->tableName, $params, $join, $columns);
 		}
 		
 	}
 
 	public function findById($id)
 	{
-		return $this->get($this->tableName, null, null, ['id' => $id])[0];
+		return $this->get($this->tableName, ['id' => $id])[0];
 	}
 
 	public function getTable()

@@ -13,7 +13,6 @@ class ApiController extends Controller
 
 		if (!Request::isAjax() && !Request::isGet()) {
 			Helper::responseCode(500);
-			echo Request::getMethod();
 			$posts['error'] = 'Internal server error';
 		} elseif (!Session::exists(Config::get('session.userId'))) {
 			Helper::responseCode(403);
